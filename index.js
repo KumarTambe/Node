@@ -14,11 +14,6 @@ areaOfTriangle(3, 6);
 
 */
 
-import fileSystem from './fileSystem.js';
-import path from 'path'
-import { fileURLToPath } from 'url';
-
-
 
 
 
