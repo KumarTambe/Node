@@ -10,3 +10,4 @@ const filePath = path.join(__dirname, '..', '.env')
 dotenv.config({ path: filePath })
 console.log(process.env.PORT)
 console.log(process.env.DB_NAME)
+
