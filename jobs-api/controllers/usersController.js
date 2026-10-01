@@ -1,13 +1,14 @@
-import users from "../ data / users.js"
+import users from "../data/users.js"
 
-export function Register() {
+export function register(req, res) {
     const id = Date.now();
     const name = req.body.name;
     const email = req.body.email;
     const password = req.body.password;
     const role = req.body.role;
     if (id && name && email && password && role) {
-
+        const existing = users.find((e) => e.email == email)
+        if (existing) return res.status(400).json({ message: "Email already exists" })
         users.push({ id, name, email, password, role })
         res.status(201).json({ message: "User created successfully" })
     } else {
@@ -15,8 +16,8 @@ export function Register() {
     }
 }
 
-export function Login() {
-    const user = users.find((u) => u.id == req.params.id)
+export function login(req, res) {
+    const user = users.find((u) => u.email == req.body.email)
     if (user) {
         if (user.password == req.body.password && user.email == req.body.email && user.name == req.body.name) {
             return res.status(200).json({ message: "Login successful" })
