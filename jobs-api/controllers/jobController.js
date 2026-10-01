@@ -30,7 +30,6 @@ export function updateJob(req, res) {
 
 export function deleteJob(req, res) {
 
-
     const index = jobs.findIndex(j => j.id == req.params.id)
     if (index === -1) return res.status(404).json({ message: "Job not found" })
     jobs.splice(index, 1)
