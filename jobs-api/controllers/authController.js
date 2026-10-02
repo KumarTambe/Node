@@ -1,4 +1,4 @@
-import users from "../data/users.js"
+import users from "../data/user.js"
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
