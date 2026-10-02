@@ -1,6 +1,8 @@
 import users from "../data/users.js"
+import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
 
-export function register(req, res) {
+export async function register(req, res) {
     const id = Date.now();
     const name = req.body.name;
     const email = req.body.email;
@@ -9,18 +11,21 @@ export function register(req, res) {
     if (id && name && email && password && role) {
         const existing = users.find((e) => e.email == email)
         if (existing) return res.status(400).json({ message: "Email already exists" })
-        users.push({ id, name, email, password, role })
+        const hashed = await bcrypt.hash(password, 10)
+        users.push({ id, name, email, password: hashed, role })
         res.status(201).json({ message: "User created successfully" })
     } else {
         res.status(400).json({ message: "Incomplete information" })
     }
 }
 
-export function login(req, res) {
+export async function login(req, res) {
     const user = users.find((u) => u.email == req.body.email)
     if (user) {
-        if (user.password == req.body.password && user.email == req.body.email && user.name == req.body.name) {
-            return res.status(200).json({ message: "Login successful" })
+        const match = await bcrypt.compare(req.body.password, user.password)
+        if (match) {
+            const token = jwt.sign({ id: user.id, role: user.role }, 'secretkey')
+            return res.status(200).json({ message: "Login successful", token })
         } else {
             return res.status(400).json({ message: "Invalid username or password" })
         }
